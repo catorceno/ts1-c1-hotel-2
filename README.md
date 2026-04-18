@@ -142,3 +142,6 @@ Como recepcionista, quiero que el sistema calcule automáticamente el costo tota
 
 ## 4. Diagrama de Base de Datos
 ![diagrama-base-de-datos](./diagrama-db.drawio.png)
+
+## 5. Video
+[Link al video](https://drive.google.com/file/d/1_wpudZRtl3VtNqFlzWym2v-qqye2YN0J/view?usp=sharing)

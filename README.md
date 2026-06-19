@@ -34,6 +34,11 @@ Como recepcionista, quiero registrar una nueva estadía asignando una habitació
 - **Dado** que la cantidad de húespedes supera al de la habitación
 - **Cuando** el recepcionista intenta confirmar la estadía
 - **Entonces** el sistema rechaza la operación con el mensaje "La cantidad de húespedes supera la capacidad de la habitación."
+
+**Escenario 6 — Campos incompletos**
+- **Dado** que no se ingresa el nombre ni el carnet de identidad de al menos 1 húesped
+- **Cuando** el recepcionista intenta confirmar la estadía
+- **Entonces** el sistema rechaza la operación con el mensaje "El nombre y número de carnet son campos obligatorios."
 ---
 
 ### HU-02 &mdash; Registrar check-in
@@ -77,11 +82,6 @@ Como recepcionista, quiero registrar el check-out de una estadía, para finaliza
 - **Dado** que la estadía está en estado *Activa* pero la fecha actual está fuera del rango reservado
 - **Cuando** el recepcionista intenta ejecutar el check-out
 - **Entonces** el sistema rechaza la operación con el mensaje "No se puede hacer check-out fuera del rango reservado"
-
-**Escenario 4 — **
-- **Dado**
-- **Cuando**
-- **Entonces**
 ---
 
 ### HU-04 &mdash; Consultar estadías

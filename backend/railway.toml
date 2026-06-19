@@ -1,0 +1,6 @@
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "dotnet backend.dll"
+healthcheckPath = "/health"

@@ -237,6 +237,39 @@ public class BookingServiceTests
     }
 
     [Test]
+    public async Task CreateBooking_HuespedesExcedenCapacidad_Fallido()
+    {
+        // Arrange
+        var roomId = 1;
+        var dto = new CreateBookingDto
+        {
+            StartDate = new DateOnly(2026, 6, 1),
+            EndDate = new DateOnly(2026, 6, 5),
+            RoomId = roomId,
+            Guests = new List<CreateGuestDto>
+            { 
+                new CreateGuestDto { Name = "Maria del Carmen", Ci = "9673020", Phone = "77999911" },
+                new CreateGuestDto { Name = "Maria del Carmen", Ci = "9673020", Phone = "77999911" }
+            }
+        };
+
+        _roomServiceMock.Setup(r => r.GetDetailsById(roomId)).ReturnsAsync(new RoomResponseDto
+        {
+            Id = roomId,
+            Type = "Simple",
+            Capacity = 1,
+            BasePrice = 150m
+        });
+
+        // Act
+        AsyncTestDelegate act = () => _bookingService.CreateBooking(dto);
+
+        // Assert
+        var exception = Assert.ThrowsAsync<ArgumentException>(act);
+        Assert.That(exception.Message, Is.EqualTo("La cantidad de húespedes supera la capacidad de la habitación."));
+    }
+
+    [Test]
     public async Task GetBookings_ExistenRegistros_Exitoso()
     {
         // Arrange

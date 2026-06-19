@@ -29,6 +29,11 @@ Como recepcionista, quiero registrar una nueva estadía asignando una habitació
 - **Dado** que la habitación selecciona no existe
 - **Cuando** el recepcionista intenta confirmar la estadía
 - **Entonces** el sistema rechaza la operación con el mensaje "La habitación seleccionada no existe en el hotel."
+
+**Escenario 5 — Sobrepasar capacidad**
+- **Dado** que la cantidad de húespedes supera al de la habitación
+- **Cuando** el recepcionista intenta confirmar la estadía
+- **Entonces** el sistema rechaza la operación con el mensaje "La cantidad de húespedes supera la capacidad de la habitación."
 ---
 
 ### HU-02 &mdash; Registrar check-in
@@ -73,6 +78,10 @@ Como recepcionista, quiero registrar el check-out de una estadía, para finaliza
 - **Cuando** el recepcionista intenta ejecutar el check-out
 - **Entonces** el sistema rechaza la operación con el mensaje "No se puede hacer check-out fuera del rango reservado"
 
+**Escenario 4 — **
+- **Dado**
+- **Cuando**
+- **Entonces**
 ---
 
 ### HU-04 &mdash; Consultar estadías

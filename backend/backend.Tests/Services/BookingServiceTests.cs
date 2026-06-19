@@ -200,4 +200,65 @@ public class BookingServiceTests
         var exception = Assert.ThrowsAsync<ArgumentException>(act);
         Assert.That(exception.Message, Is.EqualTo("Habitación ocupada"));
     }
+
+    [Test]
+    public async Task GetBookings_ExistenRegistros_Exitoso()
+    {
+        // Arrange
+        var bookingId = 100;
+        var guestId = 1;
+        var name = "Juan Marquez";
+        var ci = "8673020";
+        var phone = "77999910";
+        var roomId = 1;
+        var basePrice = 250m;
+        var startDate = new DateOnly(2026, 6, 1);
+        var endDate = new DateOnly(2026, 6, 5);
+
+        var bookings = new List<Booking>
+        {
+            new Booking
+            {
+                Id = bookingId,
+                RoomId = roomId,
+                StartDate = startDate,
+                EndDate = endDate,
+                Status = BookingStatus.Reserved
+            }
+        };
+        var guestResponseList = new List<GuestResponseDto>
+        {
+            new GuestResponseDto
+            {
+                Id = guestId,
+                Name = name,
+                Ci = ci,
+                Phone = phone
+            }
+        };
+        var roomResponse = new RoomResponseDto
+        {
+            Id = roomId,
+            BasePrice = basePrice,
+            Type = "Simple"
+        };
+        var payment = new Payment
+        {
+            Id = 1,
+            BookingId = bookingId,
+            PricePerNight = basePrice
+        };
+
+        _bookingRepoMock.Setup(b => b.GetAllAsync()).ReturnsAsync(bookings);
+        _roomServiceMock.Setup(r => r.GetDetailsById(roomId)).ReturnsAsync(roomResponse);
+        _paymentServiceMock.Setup(p => p.GetPaymentByBookingId(bookingId)).ReturnsAsync(payment);
+        _guestServiceMock.Setup(g => g.GetByBookingId(bookingId)).ReturnsAsync(guestResponseList);
+
+        // Act
+        var result = await _bookingService.GetBookings();
+
+        // Assert
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.Count, Is.EqualTo(1));
+    }
 }

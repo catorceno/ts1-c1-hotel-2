@@ -129,4 +129,40 @@ public class RoomServiceTests
         var exception = Assert.ThrowsAsync<ArgumentException>(act);
         Assert.That(exception.Message, Is.EqualTo("La fecha de inicio debe ser anterior a la fecha de fin."));
     }
+
+    [Test]
+    public async Task GetAvailableRoomsByType()
+    {
+        // Arrange
+        var startDate = new DateOnly(2026, 6, 1);
+        var endDate = new DateOnly(2026, 6, 5);
+        var roomIdOcupado = 1;
+        var roomIdLibre = 50;
+        var roomTypes = new List<RoomType>
+        {
+            new RoomType { Id = 1, Name = "Simple", Capacity = 1, BasePrice = 250m},
+            new RoomType { Id = 2, Name = "Suite", Capacity = 1, BasePrice = 800m}
+        };
+        var rooms = new List<Room>
+        {
+            new Room { Id = roomIdOcupado, HotelId = 1, TypeId = 1, Number = "100"},
+            new Room { Id = roomIdLibre, HotelId = 1, TypeId = 2, Number = "149"}
+        };
+        var bookings = new List<Booking>
+        {
+            new Booking { Id = 1, RoomId = roomIdOcupado, StartDate = new DateOnly(2026, 6, 3), EndDate = new DateOnly(2026, 6, 6) }
+        };
+
+        _roomTypeRepoMock.Setup(rt => rt.GetAllAsync()).ReturnsAsync(roomTypes);
+        _roomRepoMock.Setup(r => r.GetAllAsync()).ReturnsAsync(rooms);
+        _bookingRepoMock.Setup(b => b.GetAllAsync()).ReturnsAsync(bookings);
+
+        // Act
+        var result = await _roomService.GetAvailableRoomsByType(startDate, endDate);
+
+        // Assert
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.Count, Is.EqualTo(1));
+        Assert.That(result.FirstOrDefault(r => r.RoomType == "Suite").AvailableRooms[0].Id, Is.EqualTo(roomIdLibre));
+    }
 }

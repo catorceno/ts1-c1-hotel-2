@@ -1,4 +1,4 @@
-const BASE_URL = 'ts1-c1-hotel-2-production.up.railway.app';
+const BASE_URL = 'https://ts1-c1-hotel-2-production.up.railway.app';
 
 // wrapper genérico
 export async function apiFetch(path, options = {}){

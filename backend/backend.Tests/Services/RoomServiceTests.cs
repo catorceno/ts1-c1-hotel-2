@@ -131,7 +131,7 @@ public class RoomServiceTests
     }
 
     [Test]
-    public async Task GetAvailableRoomsByType()
+    public async Task GetAvailableRoomsByType_HabitacionesDisponibles_Exitoso()
     {
         // Arrange
         var startDate = new DateOnly(2026, 6, 1);

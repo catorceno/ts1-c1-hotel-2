@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "XWHFNAfojUs=",
+  "dgSpecHash": "h4oxJ1vAI10=",
   "success": true,
-  "projectFilePath": "C:\\Users\\camila\\Downloads\\GITHUB.005\\taller-proyectos\\dos\\ts1-c1-hotel-2\\backend\\backend.Tests\\backend.Tests.csproj",
+  "projectFilePath": "C:\\Users\\camila\\Downloads\\GITHUB.005\\taller-proyectos\\ts1-c1-hotel-2\\backend\\backend.Tests\\backend.Tests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\camila\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\camila\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

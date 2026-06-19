@@ -1,6 +1,5 @@
 [build]
-builder = "NIXPACKS"
+buildCommand = "dotnet publish backend/backend.csproj -c Release -o out"
 
 [deploy]
-startCommand = "dotnet backend.dll"
-healthcheckPath = "/health"
+startCommand = "dotnet out/backend.dll"

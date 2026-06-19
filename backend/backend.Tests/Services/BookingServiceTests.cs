@@ -191,6 +191,7 @@ public class BookingServiceTests
             RoomId = roomId,
             Guests = new List<CreateGuestDto>{ guestDto }
         };
+        _roomServiceMock.Setup(r => r.GetDetailsById(roomId)).ReturnsAsync(new RoomResponseDto { Id = roomId, Type = "Simple", Capacity = 1, BasePrice = 250m });
         _roomServiceMock.Setup(r => r.IsAvailable(roomId, startDate, endDate)).ReturnsAsync(false);
 
         // Act
@@ -209,7 +210,6 @@ public class BookingServiceTests
         var name = "Juan Marquez";
         var ci = "8673020";
         var phone = "77999910";
-        var roomId = 100;
         var startDate = new DateOnly(2026, 6, 1);
         var endDate = new DateOnly(2026, 6, 5);
         var guestDto = new CreateGuestDto
@@ -222,7 +222,7 @@ public class BookingServiceTests
         {
             StartDate = startDate,
             EndDate = endDate,
-            RoomId = roomId,
+            RoomId = roomIdInexistente,
             Guests = new List<CreateGuestDto>{ guestDto }
         };
 

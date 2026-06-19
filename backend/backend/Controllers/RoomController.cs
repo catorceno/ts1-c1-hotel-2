@@ -27,7 +27,3 @@ public class RoomController : ControllerBase
         }
     }
 }
-
-/*
-GET /api/room/available?startDate=2026-04-17&endDate=2026-05-17
-*/

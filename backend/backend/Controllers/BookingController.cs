@@ -66,18 +66,3 @@ public class BookingController : ControllerBase
         }
     }
 }
-
-/*
-{
-  "startDate": "2026-04-17",
-  "endDate": "2026-05-17",
-  "roomId": 50,
-  "guests": [
-    {
-      "name": "prueba prueba prueba 1",
-      "ci": "1234567",
-      "phone": "12345678"
-    }
-  ]
-}
-*/

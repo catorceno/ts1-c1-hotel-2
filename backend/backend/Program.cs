@@ -1,5 +1,3 @@
-// http://localhost:5162
-
 using Supabase;
 using backend.Mappings;
 

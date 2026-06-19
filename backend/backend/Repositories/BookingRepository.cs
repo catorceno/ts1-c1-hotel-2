@@ -14,8 +14,8 @@ public class BookingRepository : IBookingRepository
 
     public async Task<List<Booking>> GetAllAsync()
     {
-        var reponse = await _client.From<Booking>().Order(b => b.StartDate, Postgrest.Constants.Ordering.Descending).Get();
-        return reponse.Models;
+        var response = await _client.From<Booking>().Order(b => b.StartDate, Postgrest.Constants.Ordering.Descending).Get();
+        return response.Models;
     }
 
     public async Task<List<Booking>> GetByRoomIdAsync(long roomId)
@@ -32,7 +32,6 @@ public class BookingRepository : IBookingRepository
 
     public async Task<Booking> UpdateAsync(Booking booking)
     {
-        // validar nulls?
         var response = await _client.From<Booking>().Update(booking);
         return response.Models.FirstOrDefault();
     }

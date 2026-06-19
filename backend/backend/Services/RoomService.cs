@@ -56,23 +56,7 @@ public class RoomService : IRoomService
         foreach (var roomType in allRoomTypes)
         {
             var roomsOfType = allRooms.Where(r => r.TypeId == roomType.Id).ToList();
-            var availableRoomNumbers = new List<AvailableRoomItemDto>();
-
-            foreach (var room in roomsOfType)
-            {
-                // Verificar si la habitación está disponible en el rango de fechas
-                var roomBookings = allBookings.Where(b => b.RoomId == room.Id).ToList();
-                var hasOverlap = roomBookings.Any(b => HasDateOverlap(b, startDate, endDate));
-
-                if (!hasOverlap)
-                {
-                    availableRoomNumbers.Add(new AvailableRoomItemDto
-                    {
-                        Id = room.Id,
-                        Number = room.Number
-                    });
-                }
-            }
+            var availableRoomNumbers = GetAvailableRoomNumbers(roomsOfType, allBookings, startDate, endDate);
 
             // Solo agregar el tipo si hay habitaciones disponibles
             if (availableRoomNumbers.Count > 0)
@@ -86,5 +70,28 @@ public class RoomService : IRoomService
         }
 
         return availabilityByType;
+    }
+
+    private List<AvailableRoomItemDto> GetAvailableRoomNumbers(List<Room> roomsOfType, List<Booking> allBookings, DateOnly startDate, DateOnly endDate)
+    {
+        var availableRoomNumbers = new List<AvailableRoomItemDto>();
+
+        foreach (var room in roomsOfType)
+        {
+            // Verificar si la habitación está disponible en el rango de fechas
+            var roomBookings = allBookings.Where(b => b.RoomId == room.Id).ToList();
+            var hasOverlap = roomBookings.Any(b => HasDateOverlap(b, startDate, endDate));
+
+            if (!hasOverlap)
+            {
+                availableRoomNumbers.Add(new AvailableRoomItemDto
+                {
+                    Id = room.Id,
+                    Number = room.Number
+                });
+            }
+        }
+        
+        return availableRoomNumbers;   
     }
 }

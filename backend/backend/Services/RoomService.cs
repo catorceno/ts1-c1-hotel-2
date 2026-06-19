@@ -19,13 +19,18 @@ public class RoomService : IRoomService
         _mapper = mapper;
     }
 
+    private bool HasDateOverlap(Booking booking, DateOnly startDate, DateOnly endDate)
+    {
+        return booking.StartDate < endDate && booking.EndDate > startDate;
+    }
+
     public async Task<bool> IsAvailable(long id, DateOnly startDate, DateOnly endDate)
     {
         if (startDate >= endDate)
             throw new ArgumentException("La fecha de inicio debe ser anterior a la fecha de fin.");
         
         var bookings = await _bookingRepo.GetByRoomIdAsync(id);
-        var hasOverlap = bookings.Any(b => b.StartDate < endDate && b.EndDate > startDate); // Any --> true si hay alguno, false si no hay
+        var hasOverlap = bookings.Any(b => HasDateOverlap(b, startDate, endDate));
         return !hasOverlap;
     }
 
@@ -57,7 +62,7 @@ public class RoomService : IRoomService
             {
                 // Verificar si la habitación está disponible en el rango de fechas
                 var roomBookings = allBookings.Where(b => b.RoomId == room.Id).ToList();
-                var hasOverlap = roomBookings.Any(b => b.StartDate < endDate && b.EndDate > startDate);
+                var hasOverlap = roomBookings.Any(b => HasDateOverlap(b, startDate, endDate));
 
                 if (!hasOverlap)
                 {
@@ -82,5 +87,4 @@ public class RoomService : IRoomService
 
         return availabilityByType;
     }
-
 }

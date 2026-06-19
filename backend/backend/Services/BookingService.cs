@@ -44,14 +44,20 @@ public class BookingService : IBookingService
         return roomResponseDto;
     }
 
+    private void ValidateGuestRules(CreateBookingDto bookingDto)
+    {
+        var mainGuest = bookingDto.Guests?.FirstOrDefault();
+        if(mainGuest == null || string.IsNullOrEmpty(mainGuest.Name) || string.IsNullOrEmpty(mainGuest.Ci))
+            throw new ArgumentException("El nombre y número de carnet son campos obligatorios.");
+    }
+
     public async Task<BookingResponseDto> CreateBooking(CreateBookingDto bookingDto)
     {
         if(bookingDto.EndDate <= bookingDto.StartDate)
             throw new ArgumentException("Fecha inválida. La fecha de inicio debe ser antes de la fecha fin");
         
-        var mainGuest = bookingDto.Guests?.FirstOrDefault();
-        if(mainGuest == null || string.IsNullOrEmpty(mainGuest.Name) || string.IsNullOrEmpty(mainGuest.Ci))
-            throw new ArgumentException("El nombre y número de carnet son campos obligatorios.");
+        ValidateGuestRules(bookingDto);
+
         var roomResponseDto = await ValidateRoomRules(bookingDto);
         
         // todo este bloque debería estar en una transacción, entonces si alguno falla nada se hace.

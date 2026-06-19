@@ -16,7 +16,7 @@ public class BookingServiceTests
     private Mock<IPaymentService> _paymentServiceMock;
 
     private Mock<IMapper> _mapperMock;
-    private BookingService _service;
+    private BookingService _bookingService;
 
     [SetUp]
     public void Setup()
@@ -30,7 +30,7 @@ public class BookingServiceTests
         _paymentServiceMock = new Mock<IPaymentService>();
 
         _mapperMock = new Mock<IMapper>();
-        _service = new BookingService(
+        _bookingService = new BookingService(
             _bookingRepoMock.Object,
             _guestBookingRepoMock.Object,
             _guestRepoMock.Object,
@@ -128,11 +128,43 @@ public class BookingServiceTests
         _mapperMock.Setup(m => m.Map<BookingResponseDto>(bookingCreated)).Returns(bookingResponse);
 
         // Act
-        var result = await _service.CreateBooking(dto);
+        var result = await _bookingService.CreateBooking(dto);
 
         // Assert
         Assert.That(result.Status, Is.EqualTo(BookingStatus.Reserved));
         _paymentServiceMock.Verify(p => p.CreatePaymentForBooking(It.Is<Booking>(b => b.Status == BookingStatus.Reserved)), Times.Once);
         _guestBookingRepoMock.Verify(gb => gb.CreateAsync(It.Is<GuestBooking>(gb => gb.GuestId == guestResponse.Id)), Times.Once);
+    }
+
+    [Test]
+    public async Task CreateBooking_FechaInicioPosteriorFechaFin_Fallido()
+    {
+        // Arrange
+        var name = "Juan Marquez";
+        var ci = "8673020";
+        var phone = "77999910";
+        var roomId = 100;
+        var startDate = new DateOnly(2026, 6, 5);
+        var endDate = new DateOnly(2026, 6, 1);
+        var guestDto = new CreateGuestDto
+        {
+            Name = name,
+            Ci = ci,
+            Phone = phone
+        };
+        var dto = new CreateBookingDto
+        {
+            StartDate = startDate,
+            EndDate = endDate,
+            RoomId = roomId,
+            Guests = new List<CreateGuestDto>{ guestDto }
+        };
+
+        // Act
+        AsyncTestDelegate act = () => _bookingService.CreateBooking(dto);
+
+        // Assert
+        var exception = Assert.ThrowsAsync<Exception>(act);
+        Assert.That(exception.Message, Is.EqualTo("Fecha inválida. La fecha de inicio debe ser antes de la fecha fin"));
     }
 }

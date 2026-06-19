@@ -28,11 +28,8 @@ public class BookingService : IBookingService
         _mapper = mapper;
     }
 
-    public async Task<BookingResponseDto> CreateBooking(CreateBookingDto bookingDto)
+    private async Task<RoomResponseDto> ValidateRoomRules(CreateBookingDto bookingDto)
     {
-        if(bookingDto.EndDate <= bookingDto.StartDate)
-            throw new ArgumentException("Fecha inválida. La fecha de inicio debe ser antes de la fecha fin");
-        
         var roomResponseDto = await _roomService.GetDetailsById(bookingDto.RoomId);
         if(roomResponseDto == null)
             throw new ArgumentException("La habitación seleccionada no existe en el hotel.");
@@ -43,6 +40,16 @@ public class BookingService : IBookingService
         var available = await _roomService.IsAvailable(bookingDto.RoomId, bookingDto.StartDate, bookingDto.EndDate);
         if(!available)
             throw new ArgumentException("Habitación ocupada");
+        
+        return roomResponseDto;
+    }
+
+    public async Task<BookingResponseDto> CreateBooking(CreateBookingDto bookingDto)
+    {
+        if(bookingDto.EndDate <= bookingDto.StartDate)
+            throw new ArgumentException("Fecha inválida. La fecha de inicio debe ser antes de la fecha fin");
+        
+        var roomResponseDto = await ValidateRoomRules(bookingDto);
         
         // todo este bloque debería estar en una transacción, entonces si alguno falla nada se hace.
         // 1. crear guests

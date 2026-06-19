@@ -282,8 +282,8 @@ public class BookingServiceTests
             RoomId = roomId,
             Guests = new List<CreateGuestDto>
             { 
-                new CreateGuestDto { Name = "Maria del Carmen", Ci = "9673020", Phone = "" },
-                new CreateGuestDto { Name = "", Ci = "", Phone = "" }
+                new CreateGuestDto { Name = "", Ci = "", Phone = "77999977" },
+                new CreateGuestDto { Name = "Maria del Carmen", Ci = "9673020", Phone = "" }
             }
         };
 

@@ -49,6 +49,9 @@ public class BookingService : IBookingService
         if(bookingDto.EndDate <= bookingDto.StartDate)
             throw new ArgumentException("Fecha inválida. La fecha de inicio debe ser antes de la fecha fin");
         
+        var mainGuest = bookingDto.Guests?.FirstOrDefault();
+        if(mainGuest == null || string.IsNullOrEmpty(mainGuest.Name) || string.IsNullOrEmpty(mainGuest.Ci))
+            throw new ArgumentException("El nombre y número de carnet son campos obligatorios.");
         var roomResponseDto = await ValidateRoomRules(bookingDto);
         
         // todo este bloque debería estar en una transacción, entonces si alguno falla nada se hace.

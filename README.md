@@ -25,6 +25,10 @@ Como recepcionista, quiero registrar una nueva estadía asignando una habitació
 - **Cuando** el recepcionista intenta confirmar la estadía
 - **Entonces** el sistema rechaza la operación con el mensaje "La fecha de inicio debe ser anterior a la fecha fin"
 
+**Escenario 4 — Habitación no existente**
+- **Dado** que la habitación selecciona no existe
+- **Cuando** el recepcionista intenta confirmar la estadía
+- **Entonces** el sistema rechaza la operación con el mensaje "La habitación seleccionada no existe en el hotel."
 ---
 
 ### HU-02 &mdash; Registrar check-in

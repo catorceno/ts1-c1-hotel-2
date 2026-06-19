@@ -202,6 +202,41 @@ public class BookingServiceTests
     }
 
     [Test]
+    public async Task CreateBooking_HabitacionNoExiste_Fallido()
+    {
+        // Arrange
+        var roomIdInexistente = 0;
+        var name = "Juan Marquez";
+        var ci = "8673020";
+        var phone = "77999910";
+        var roomId = 100;
+        var startDate = new DateOnly(2026, 6, 1);
+        var endDate = new DateOnly(2026, 6, 5);
+        var guestDto = new CreateGuestDto
+        {
+            Name = name,
+            Ci = ci,
+            Phone = phone
+        };
+        var dto = new CreateBookingDto
+        {
+            StartDate = startDate,
+            EndDate = endDate,
+            RoomId = roomId,
+            Guests = new List<CreateGuestDto>{ guestDto }
+        };
+
+        _roomServiceMock.Setup(r => r.GetDetailsById(roomIdInexistente)).ReturnsAsync((RoomResponseDto)null);
+
+        // Act
+        AsyncTestDelegate act = () => _bookingService.CreateBooking(dto);
+
+        // Assert
+        var exception = Assert.ThrowsAsync<ArgumentException>(act);
+        Assert.That(exception.Message, Is.EqualTo("La habitación seleccionada no existe en el hotel."));
+    }
+
+    [Test]
     public async Task GetBookings_ExistenRegistros_Exitoso()
     {
         // Arrange

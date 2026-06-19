@@ -100,7 +100,8 @@ public class BookingServiceTests
         {
             Id = roomId,
             BasePrice = basePrice,
-            Type = "Simple"
+            Type = "Simple",
+            Capacity = 1
         };
         var paymentCreated = new Payment
         {

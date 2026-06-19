@@ -37,6 +37,9 @@ public class BookingService : IBookingService
         if(roomResponseDto == null)
             throw new ArgumentException("La habitación seleccionada no existe en el hotel.");
         
+        if(bookingDto.Guests.Count > roomResponseDto.Capacity)
+            throw new ArgumentException("La cantidad de húespedes supera la capacidad de la habitación.");
+        
         var available = await _roomService.IsAvailable(bookingDto.RoomId, bookingDto.StartDate, bookingDto.EndDate);
         if(!available)
             throw new ArgumentException("Habitación ocupada");

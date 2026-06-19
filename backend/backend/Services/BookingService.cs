@@ -152,31 +152,34 @@ public class BookingService : IBookingService
 
         foreach (var booking in bookings)
         {
-            var roomResponseDto = await _roomService.GetDetailsById(booking.RoomId);
-            var payment = await _paymentService.GetPaymentByBookingId(booking.Id);
-            var guestResponseDtos = await _guestService.GetByBookingId(booking.Id);
-
-            var bookingDetailsDto = new BookingDetailsReponseDto
-            {
-                Id = booking.Id,
-                StartDate = booking.StartDate,
-                EndDate = booking.EndDate,
-                CheckIn = booking.CheckIn,
-                CheckOut = booking.CheckOut,
-                Status = booking.Status,
-                Room = roomResponseDto,
-                Payment = new PaymentResponseDto
-                {
-                    Id = payment.Id,
-                    PricePerNight = payment.PricePerNight,
-                    Total = payment.Total
-                },
-                Guests = guestResponseDtos
-            };
-
-            bookingDetails.Add(bookingDetailsDto);
+            bookingDetails.Add(await BuildBookingDetails(booking));
         }
 
         return bookingDetails;
+    }
+
+    private async Task<BookingDetailsReponseDto> BuildBookingDetails(Booking booking)
+    {
+        var roomResponseDto = await _roomService.GetDetailsById(booking.RoomId);
+        var payment = await _paymentService.GetPaymentByBookingId(booking.Id);
+        var guestResponseDtos = await _guestService.GetByBookingId(booking.Id);
+
+        return new BookingDetailsReponseDto
+        {
+            Id = booking.Id,
+            StartDate = booking.StartDate,
+            EndDate = booking.EndDate,
+            CheckIn = booking.CheckIn,
+            CheckOut = booking.CheckOut,
+            Status = booking.Status,
+            Room = roomResponseDto,
+            Payment = new PaymentResponseDto
+            {
+                Id = payment.Id,
+                PricePerNight = payment.PricePerNight,
+                Total = payment.Total
+            },
+            Guests = guestResponseDtos
+        };
     }
 }

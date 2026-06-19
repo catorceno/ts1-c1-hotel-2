@@ -33,8 +33,8 @@ public class BookingService : IBookingService
         if(bookingDto.EndDate <= bookingDto.StartDate)
             throw new ArgumentException("Fecha inválida. La fecha de inicio debe ser antes de la fecha fin");
         
-        var room = await _roomService.GetDetailsById(bookingDto.RoomId);
-        if(room == null)
+        var roomResponseDto = await _roomService.GetDetailsById(bookingDto.RoomId);
+        if(roomResponseDto == null)
             throw new ArgumentException("La habitación seleccionada no existe en el hotel.");
         
         var available = await _roomService.IsAvailable(bookingDto.RoomId, bookingDto.StartDate, bookingDto.EndDate);
@@ -71,7 +71,6 @@ public class BookingService : IBookingService
 
         //
 
-        var roomResponseDto = await _roomService.GetDetailsById(bookingCreated.RoomId);
         var bookingResponseDto = _mapper.Map<BookingResponseDto>(bookingCreated);
         bookingResponseDto.Room = roomResponseDto;
         bookingResponseDto.Guests = guestResponseDtos;

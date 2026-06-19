@@ -167,4 +167,37 @@ public class BookingServiceTests
         var exception = Assert.ThrowsAsync<Exception>(act);
         Assert.That(exception.Message, Is.EqualTo("Fecha inválida. La fecha de inicio debe ser antes de la fecha fin"));
     }
+
+    [Test]
+    public async Task CreateBooking_HabitacionOcupada_Fallido()
+    {
+        // Arrange
+        var name = "Juan Marquez";
+        var ci = "8673020";
+        var phone = "77999910";
+        var roomId = 100;
+        var startDate = new DateOnly(2026, 6, 1);
+        var endDate = new DateOnly(2026, 6, 5);
+        var guestDto = new CreateGuestDto
+        {
+            Name = name,
+            Ci = ci,
+            Phone = phone
+        };
+        var dto = new CreateBookingDto
+        {
+            StartDate = startDate,
+            EndDate = endDate,
+            RoomId = roomId,
+            Guests = new List<CreateGuestDto>{ guestDto }
+        };
+        _roomServiceMock.Setup(r => r.IsAvailable(roomId, startDate, endDate)).ReturnsAsync(false);
+
+        // Act
+        AsyncTestDelegate act = () => _bookingService.CreateBooking(dto);
+
+        // Assert
+        var exception = Assert.ThrowsAsync<Exception>(act);
+        Assert.That(exception.Message, Is.EqualTo("Habitación ocupada"));
+    }
 }

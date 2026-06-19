@@ -31,11 +31,11 @@ public class BookingService : IBookingService
     public async Task<BookingResponseDto> CreateBooking(CreateBookingDto bookingDto)
     {
         if(bookingDto.EndDate <= bookingDto.StartDate)
-            throw new Exception("Fecha inválida. La fecha de inicio debe ser antes de la fecha fin");
+            throw new ArgumentException("Fecha inválida. La fecha de inicio debe ser antes de la fecha fin");
         
         var available = await _roomService.IsAvailable(bookingDto.RoomId, bookingDto.StartDate, bookingDto.EndDate);
         if(!available)
-            throw new Exception("Habitación ocupada");
+            throw new ArgumentException("Habitación ocupada");
         
         // todo este bloque debería estar en una transacción, entonces si alguno falla nada se hace.
         // 1. crear guests
